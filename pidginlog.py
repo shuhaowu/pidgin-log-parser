@@ -5,6 +5,7 @@ import cPickle
 from bisect import bisect_left
 
 SHOWMATCHED = 0
+SHOWERROR = 1
 
 def inList(l, x):
     i = bisect_left(l, x)
@@ -134,7 +135,8 @@ class PidginLogParser:
     def warning(self, message, problem, severity=1, **details):
         w = ParserWarning(message, problem, severity, **details)
         self.warnings.append(w)
-        print >> sys.stderr, str(w)
+        if SHOWERROR:
+            print >> sys.stderr, str(w)
     
 
     def save(self, filename):

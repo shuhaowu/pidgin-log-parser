@@ -3,3 +3,64 @@ Pidgin Log Parser is a parser written with Python that parses through the logs o
 Requires BeautifulSoup to run.
 
 words.txt is extracted from the Think Python book. To replace simply put 1 word in each line.
+
+To use pidgin log parser library as of the moment, there are 3 ways (first 2 you must use the console):
+
+Method 1:
+Open pidginlog.py using IDLE. Press F5 to run it. This will import everything directly into the console and allow you to use it.
+
+Method 2:
+Open python console, make sure you can import pidginlog.
+type from pidginlog import *
+
+Method 3:
+You can import pidginlog in a python file and use it from there.
+
+From now on I assume that you have from pidginlog import *
+
+Since the pidgin logs are in a directory (it's recommended that you put each individual contact in a directory), to start parsing through the logs, you must start with (The variable name doesn't have to be p): 
+
+	p = PidginLogParser(r"path/to/log/directory")
+
+This will automatically parse through that directory. By default, warnings should show up saying certain things are missing (I haven't fully tested, it works in most of my cases (30 warnings in 14000 messages, however I never use custom font and such, so I don't know for sure))
+
+Data are stored in p.sessions
+
+Some simple commands:
+	p.save("/path/to/data/file") -- This saves p.sessions using cPickle, allowing it to be quickly loaded again.
+	sessions = load("/path/to/data/file") -- This loads the p.sessions saved by cPickle
+	print sessions.nicks -- Shows nicknames and their associated message count, character count, word counts.
+
+Preloaded data mining functions:
+	sessions.wordcount(senders=[], showMatched=False) -- This returns a word count. senders is a list of nicknames (matches the nicks in sessions.nicks, cases are ignored) that is to be counted. If it is left as an empty list, all nicks are matched.  showMatched is if you want to see the match be printed to console.
+	sessions.charactercount(senders=[], showMatched=False) -- Returns the character count. senders and showMatched are same as above.
+	sessions.search(s, senders=[], ignoreCase=False, showMatched=False) -- This searchs from a text and returns the number of times it was said. s is the search string. ignoreCase checks if it ignores case. Set it to True and it would match even if the case are different. senders and showMatched are same as above.
+	sessions.searchRegex(regex, senders=[], ignoreCase=False, showMatched=False) -- This uses regex to search for match and returns the count. regex is where you type in the regex string (not the object). ignoreCase, senders, and showMatched are same as above.
+	sessions.messagescount(senders=[], showMatched=False) -- Counts the number of messages.
+	sessions.vocabcount(senders=[], coolreturn=False) -- Checks the number of actual words that's unique given the dictionary at words.txt. senders is the sames as above. if coolreturn is set to true, the dictionary containing the words and their usage frequency is returned.
+	
+Advanced data mining functions:
+	session.dataCount(callback, senders=[], showMatched=False) 
+		This is the core function that all above uses. senders and showMatched you already know. The callback variable accepts a reference to a function. This function should be formated as def nameYourFunction(message, senders). message is the Message object. It includes things such as: 
+			.time - the time in a string format.
+			.struct_time - time.strptime return
+			.timestamp - the unixtimestamp
+			.sender - the nickname of the sender
+			.message - the message content as a string.
+		
+		senders the the list of senders as given to dataCount.
+		
+		This function is in a loop through every single message in the sessions. If the sender matches, the function gets called. This function should return a numerical value, indicating the number to add to the total count value.
+		
+		For example: The wordcount function above works as the follows:
+			The dataCount function is called, and the callback is set to an inner function named wc within wordcount. 
+			dataCount loops through the messages. It matches the sender.
+			dataCount calls wc, and passes the message and the senders to wc.
+			wc gets the message, splits the message.message, and returns the length of that array (effectively getting the word count).
+			dataCount gets the return from wc and adds it to the count variable
+			dataCount continues through the loop.
+			
+			After it finishes the loop, dataCount returns the count.
+		
+		Using this function, you can count all sorts of different things.
+	
