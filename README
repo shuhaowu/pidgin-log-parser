@@ -33,10 +33,15 @@ Some simple commands:
 
 Preloaded data mining functions:
 	sessions.wordcount(senders=[], showMatched=False) -- This returns a word count. senders is a list of nicknames (matches the nicks in sessions.nicks, cases are ignored) that is to be counted. If it is left as an empty list, all nicks are matched.  showMatched is if you want to see the match be printed to console.
+	
 	sessions.charactercount(senders=[], showMatched=False) -- Returns the character count. senders and showMatched are same as above.
+	
 	sessions.search(s, senders=[], ignoreCase=False, showMatched=False) -- This searchs from a text and returns the number of times it was said. s is the search string. ignoreCase checks if it ignores case. Set it to True and it would match even if the case are different. senders and showMatched are same as above.
+	
 	sessions.searchRegex(regex, senders=[], ignoreCase=False, showMatched=False) -- This uses regex to search for match and returns the count. regex is where you type in the regex string (not the object). ignoreCase, senders, and showMatched are same as above.
+	
 	sessions.messagescount(senders=[], showMatched=False) -- Counts the number of messages.
+	
 	sessions.vocabcount(senders=[], coolreturn=False) -- Checks the number of actual words that's unique given the dictionary at words.txt. senders is the sames as above. if coolreturn is set to true, the dictionary containing the words and their usage frequency is returned.
 	
 Advanced data mining functions:
@@ -63,4 +68,7 @@ Advanced data mining functions:
 			After it finishes the loop, dataCount returns the count.
 		
 		Using this function, you can count all sorts of different things.
-	
+
+Settings:
+	SHOWMATCHED = True/False - Global flag for showMatched. If this is set to True, it will print out matches regardless of the showMatched function parameter. Default: False
+	SHOWERROR = True/False - If set to true, p = PidginLogParser() will not print any messages. Default: True

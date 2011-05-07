@@ -193,7 +193,8 @@ class PidginLogParser:
         chat = None
         i = 0
         while len(chatTag.contents) > 3:
-            print >> sys.stderr, "Notice: Stripping Links from %s\n" % repr(chatTag)
+            if SHOWERROR:
+                print >> sys.stderr, "Notice: Stripping Links from %s\n" % repr(chatTag)
             self.stripLinks(chatTag)
             i += 1
             if i >= 10:
