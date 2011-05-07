@@ -1,0 +1,3 @@
+Pidgin Log Parser is a parser written with Python that parses through the logs of Pidgin and convert it to usable format that allows one to data mine.
+
+Requires BeautifulSoup to run.

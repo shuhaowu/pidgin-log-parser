@@ -1,0 +1,4 @@
+data/
+*.pyc
+BeautifulSoup.py
+Thumbs.db
